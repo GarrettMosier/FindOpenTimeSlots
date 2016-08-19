@@ -6,7 +6,7 @@ type OpenSlots = [TimeRange]
 type Meetings = [TimeRange]
 
 testRange :: Meetings
-testRange = [TimeRange 10 12, TimeRange 1 4, TimeRange 18 19, TimeRange 8 9]
+testRange = [TimeRange 10 12, TimeRange 1 4, TimeRange 18 19, TimeRange 8 9, TimeRange 4 25, TimeRange (-5) 1]
 
 testDayRange :: DayPeriod
 testDayRange = TimeRange 0 20
