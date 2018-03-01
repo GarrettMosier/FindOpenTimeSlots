@@ -6,8 +6,12 @@ type OpenSlots = [TimeRange]
 type Meetings = [TimeRange]
 type Time = Int
 
-testRange :: Meetings
-testRange = [TimeRange 10 12, TimeRange 1 4, TimeRange 18 19, TimeRange 8 9, TimeRange 4 25, TimeRange (-5) 1]
+testRangeOne :: Meetings
+testRangeOne = [TimeRange 10 12, TimeRange 1 4, TimeRange 18 19, TimeRange 8 9, TimeRange 4 25, TimeRange (-5) 1]
+
+testRangeTwo :: Meetings
+testRangeTwo = [TimeRange 5 15, TimeRange 1 2, TimeRange 18 19]
+
 
 testDayRange :: DayPeriod
 testDayRange = TimeRange 0 20
@@ -25,7 +29,9 @@ findOpenPeriods dayRange@(TimeRange dayStart dayEnd) allMeetings = reverse $ fil
 
 
 findOpenPeriodsHelper :: DayPeriod -> Meetings -> OpenSlots -> Time -> OpenSlots
-findOpenPeriodsHelper (TimeRange _ dayEnd) [] openSlots lastMeetingEnd = if lastMeetingEnd < dayEnd then (TimeRange lastMeetingEnd dayEnd) : openSlots else openSlots
+findOpenPeriodsHelper (TimeRange _ dayEnd) [] openSlots lastMeetingEnd = if lastMeetingEnd < dayEnd
+                                                                             then (TimeRange lastMeetingEnd dayEnd) : openSlots
+                                                                             else openSlots
 findOpenPeriodsHelper dayRange ((TimeRange meetingStart meetingEnd) : remainingMeetings) openSlots meetingRangeEnd = remainingOpenMeetings
                 where remainingOpenMeetings = findOpenPeriodsHelper dayRange remainingMeetings newOpenSlots newMeetingRangeEnd
                       toAppend = meetingEnd > meetingRangeEnd
@@ -35,4 +41,6 @@ findOpenPeriodsHelper dayRange ((TimeRange meetingStart meetingEnd) : remainingM
 
 
 main :: IO ()
-main = print $ findOpenPeriods testDayRange testRange
+main = do
+  print $ findOpenPeriods testDayRange testRangeOne
+  print $ findOpenPeriods testDayRange testRangeTwo
