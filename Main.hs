@@ -10,7 +10,10 @@ testRangeOne :: Meetings
 testRangeOne = [TimeRange 10 12, TimeRange 1 4, TimeRange 18 19, TimeRange 8 9, TimeRange 4 25, TimeRange (-5) 1]
 
 testRangeTwo :: Meetings
-testRangeTwo = [TimeRange 5 15, TimeRange 1 2, TimeRange 18 19]
+testRangeTwo = [TimeRange 5 15, TimeRange 1 2, TimeRange 18 19, TimeRange 10 13]
+
+testRangeThree :: Meetings
+testRangeThree = [TimeRange 2 4, TimeRange 3 5]
 
 
 testDayRange :: DayPeriod
@@ -23,9 +26,9 @@ validTimeRange (TimeRange start end) = start < end
 
 findOpenPeriods :: DayPeriod -> Meetings -> OpenSlots
 findOpenPeriods dayRange@(TimeRange dayStart dayEnd) allMeetings = reverse $ filter validTimeRange openSlots
-                where openSlots = findOpenPeriodsHelper dayRange cleanMeetings [] dayStart
-                      cleanMeetings = filter withinDay $ sort allMeetings
-                      withinDay (TimeRange start end) = start < dayEnd && end > dayStart -- Double check semantics for being in a day
+                where openSlots = findOpenPeriodsHelper dayRange meetingsDuringDay [] dayStart
+                      meetingsDuringDay = filter withinDay $ sort allMeetings
+                      withinDay (TimeRange start end) = start < dayEnd && end > dayStart
 
 
 findOpenPeriodsHelper :: DayPeriod -> Meetings -> OpenSlots -> Time -> OpenSlots
@@ -44,3 +47,4 @@ main :: IO ()
 main = do
   print $ findOpenPeriods testDayRange testRangeOne
   print $ findOpenPeriods testDayRange testRangeTwo
+  print $ findOpenPeriods testDayRange testRangeThree
