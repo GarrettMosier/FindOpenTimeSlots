@@ -13,12 +13,16 @@ testDayRange :: DayPeriod
 testDayRange = TimeRange 0 20
 
 
+validTimeRange :: TimeRange -> Bool
+validTimeRange (TimeRange start end) = start < end
+
+
 findOpenPeriods :: DayPeriod -> Meetings -> OpenSlots
 findOpenPeriods dayRange@(TimeRange dayStart dayEnd) allMeetings = reverse $ filter validTimeRange openSlots
                 where openSlots = findOpenPeriodsHelper dayRange cleanMeetings [] dayStart
                       cleanMeetings = filter withinDay $ sort allMeetings
                       withinDay (TimeRange start end) = start < dayEnd && end > dayStart -- Double check semantics for being in a day
-                      validTimeRange (TimeRange start end) = start < end
+
 
 findOpenPeriodsHelper :: DayPeriod -> Meetings -> OpenSlots -> Time -> OpenSlots
 findOpenPeriodsHelper (TimeRange _ dayEnd) [] openSlots lastMeetingEnd = if lastMeetingEnd < dayEnd then (TimeRange lastMeetingEnd dayEnd) : openSlots else openSlots
