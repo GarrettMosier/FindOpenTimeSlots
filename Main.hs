@@ -21,12 +21,15 @@ testDayRange = TimeRange 0 20
 
 
 validTimeRange :: TimeRange -> Bool
-validTimeRange (TimeRange start end) = start < end
+validTimeRange (TimeRange start end) = start < end && start /= end
 
 
 findOpenPeriods :: DayPeriod -> Meetings -> OpenSlots
 findOpenPeriods dayRange@(TimeRange dayStart dayEnd) allMeetings = reverse $ filter validTimeRange openSlots
-                where openSlots = findOpenPeriodsHelper dayRange (sort allMeetings) [] dayStart
+                where openSlots = findOpenPeriodsHelper dayRange validMeetings [] dayStart
+                      validMeetings = filter validTimeRange $ sort remappedMeetings
+                      remappedMeetings = map clampDaySides allMeetings
+                      clampDaySides = \(TimeRange start end) -> (TimeRange (max start dayStart) (min end dayEnd))
 
 
 findOpenPeriodsHelper :: DayPeriod -> Meetings -> OpenSlots -> Time -> OpenSlots
