@@ -39,7 +39,7 @@ findOpenPeriodsHelper (TimeRange _ dayEnd) [] openSlots lastMeetingEnd = if last
 findOpenPeriodsHelper dayRange@(TimeRange _ dayEnd) ((TimeRange meetingStart meetingEnd) : remainingMeetings) openSlots meetingRangeEnd = remainingOpenMeetings
                 where remainingOpenMeetings = findOpenPeriodsHelper dayRange remainingMeetings newOpenSlots newMeetingRangeEnd
                       toAppendToOpenSlots = meetingEnd > meetingRangeEnd
-                      newMeetingRangeEnd = if meetingEnd > dayEnd then dayEnd else max meetingEnd meetingRangeEnd 
+                      newMeetingRangeEnd = max meetingEnd meetingRangeEnd 
                       openSlot = TimeRange meetingRangeEnd meetingStart
                       newOpenSlots = if toAppendToOpenSlots then openSlot : openSlots else openSlots
 
