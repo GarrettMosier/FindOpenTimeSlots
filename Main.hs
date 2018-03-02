@@ -23,24 +23,24 @@ testDayRange = TimeRange 0 20
 validTimeRange :: TimeRange -> Bool
 validTimeRange (TimeRange start end) = start < end && start /= end
 
-clampDaySides :: DayPeriod -> TimeRange -> TimeRange
-clampDaySides (TimeRange dayStart dayEnd) (TimeRange start end) = (TimeRange (max start dayStart) (min end dayEnd))
+clampTimeToDay :: DayPeriod -> TimeRange -> TimeRange
+clampTimeToDay (TimeRange dayStart dayEnd) (TimeRange start end) = (TimeRange (max start dayStart) (min end dayEnd))
 
 
 findOpenPeriods :: DayPeriod -> Meetings -> OpenSlots
-findOpenPeriods dayRange@(TimeRange dayStart dayEnd) allMeetings = reverse $ filter validTimeRange openSlots
+findOpenPeriods dayRange@(TimeRange dayStart _) allMeetings = reverse $ filter validTimeRange openSlots
                 where openSlots = findOpenPeriodsHelper dayRange validMeetings [] dayStart
                       validMeetings = filter validTimeRange $ sort remappedMeetings
-                      remappedMeetings = map (clampDaySides dayRange) allMeetings
+                      remappedMeetings = map (clampTimeToDay dayRange) allMeetings
 
 
 findOpenPeriodsHelper :: DayPeriod -> Meetings -> OpenSlots -> Time -> OpenSlots
 findOpenPeriodsHelper (TimeRange _ dayEnd) [] openSlots lastMeetingEnd = if lastMeetingEnd < dayEnd
                                                                              then (TimeRange lastMeetingEnd dayEnd) : openSlots
                                                                              else openSlots
-findOpenPeriodsHelper dayRange@(TimeRange _ dayEnd) ((TimeRange meetingStart meetingEnd) : remainingMeetings) openSlots meetingRangeEnd = remainingOpenMeetings
+findOpenPeriodsHelper dayRange ((TimeRange meetingStart meetingEnd) : remainingMeetings) openSlots meetingRangeEnd = remainingOpenMeetings
                 where remainingOpenMeetings = findOpenPeriodsHelper dayRange remainingMeetings newOpenSlots newMeetingRangeEnd
-                      toAppendToOpenSlots = meetingEnd > meetingRangeEnd
+                      toAppendToOpenSlots = meetingEnd > meetingRangeEnd -- TODO Is this correct?
                       newMeetingRangeEnd = max meetingEnd meetingRangeEnd 
                       openSlot = TimeRange meetingRangeEnd meetingStart
                       newOpenSlots = if toAppendToOpenSlots then openSlot : openSlots else openSlots
