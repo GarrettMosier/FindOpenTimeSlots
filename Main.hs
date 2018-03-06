@@ -4,20 +4,20 @@ data TimeRange = TimeRange Time Time deriving (Show, Eq, Ord)
 type DayPeriod = TimeRange
 type OpenSlots = [TimeRange]
 type Meetings = [TimeRange]
-type Time = Int
+newtype Time = Time Int deriving (Show, Eq, Ord)
 
 testRangeOne :: Meetings
-testRangeOne = [TimeRange 10 12, TimeRange 1 4, TimeRange 18 19, TimeRange 8 9, TimeRange 4 25, TimeRange (-5) 1]
+testRangeOne = [TimeRange (Time 10) (Time 12), TimeRange (Time 1) (Time 4), TimeRange (Time 18) (Time 19), TimeRange (Time 8) (Time 9), TimeRange (Time 4) (Time 25), TimeRange (Time (-5)) (Time 1)]
 
 testRangeTwo :: Meetings
-testRangeTwo = [TimeRange 5 15, TimeRange 1 2, TimeRange 18 19, TimeRange 10 13]
+testRangeTwo = [TimeRange (Time 5) (Time 15), TimeRange (Time 1) (Time 2), TimeRange (Time 18) (Time 19), TimeRange (Time 10) (Time 13)]
 
 testRangeThree :: Meetings
-testRangeThree = [TimeRange 2 4, TimeRange 3 5]
+testRangeThree = [TimeRange (Time 2) (Time 4), TimeRange (Time 3) (Time 5)]
 
 
 testDayRange :: DayPeriod
-testDayRange = TimeRange 0 20
+testDayRange = TimeRange (Time 0) (Time 20)
 
 
 validTimeRange :: TimeRange -> Bool
