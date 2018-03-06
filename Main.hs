@@ -1,10 +1,11 @@
 import Data.List
 
+newtype Time   = Time Int deriving (Show, Eq, Ord)
 data TimeRange = TimeRange Time Time deriving (Show, Eq, Ord)
 type DayPeriod = TimeRange
 type OpenSlots = [TimeRange]
-type Meetings = [TimeRange]
-newtype Time = Time Int deriving (Show, Eq, Ord)
+type Meetings  = [TimeRange]
+
 
 testRangeOne :: Meetings
 testRangeOne = [TimeRange (Time 10) (Time 12), TimeRange (Time 1) (Time 4), TimeRange (Time 18) (Time 19), TimeRange (Time 8) (Time 9), TimeRange (Time 4) (Time 25), TimeRange (Time (-5)) (Time 1)]
@@ -15,13 +16,13 @@ testRangeTwo = [TimeRange (Time 5) (Time 15), TimeRange (Time 1) (Time 2), TimeR
 testRangeThree :: Meetings
 testRangeThree = [TimeRange (Time 2) (Time 4), TimeRange (Time 3) (Time 5)]
 
-
 testDayRange :: DayPeriod
 testDayRange = TimeRange (Time 0) (Time 20)
 
 
 validTimeRange :: TimeRange -> Bool
 validTimeRange (TimeRange start end) = start < end && start /= end
+
 
 clampTimeToDay :: DayPeriod -> TimeRange -> TimeRange
 clampTimeToDay (TimeRange dayStart dayEnd) (TimeRange start end) = (TimeRange (max start dayStart) (min end dayEnd))
@@ -40,7 +41,7 @@ findOpenPeriodsHelper (TimeRange _ dayEnd) [] openSlots lastMeetingEnd = if last
                                                                              else openSlots
 findOpenPeriodsHelper dayRange ((TimeRange meetingStart meetingEnd) : remainingMeetings) openSlots meetingRangeEnd = remainingOpenMeetings
                 where remainingOpenMeetings = findOpenPeriodsHelper dayRange remainingMeetings newOpenSlots newMeetingRangeEnd
-                      toAppendToOpenSlots = meetingEnd > meetingRangeEnd -- TODO Is this correct?
+                      toAppendToOpenSlots = meetingEnd > meetingRangeEnd 
                       newMeetingRangeEnd = max meetingEnd meetingRangeEnd 
                       openSlot = TimeRange meetingRangeEnd meetingStart
                       newOpenSlots = if toAppendToOpenSlots then openSlot : openSlots else openSlots
