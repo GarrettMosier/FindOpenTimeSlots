@@ -29,7 +29,7 @@ clampTimeToDay (TimeRange dayStart dayEnd) (TimeRange start end) = (TimeRange (m
 
 
 findOpenPeriods :: DayPeriod -> Meetings -> OpenSlots
-findOpenPeriods dayRange@(TimeRange dayStart _) allMeetings = reverse $ filter validTimeRange openSlots
+findOpenPeriods dayRange@(TimeRange dayStart _) allMeetings = reverse openSlots
                 where openSlots = findOpenPeriodsHelper dayRange validMeetings [] dayStart
                       validMeetings = filter validTimeRange $ sort remappedMeetings
                       remappedMeetings = map (clampTimeToDay dayRange) allMeetings
@@ -41,7 +41,7 @@ findOpenPeriodsHelper (TimeRange _ dayEnd) [] openSlots lastMeetingEnd = if last
                                                                              else openSlots
 findOpenPeriodsHelper dayRange ((TimeRange meetingStart meetingEnd) : remainingMeetings) openSlots meetingRangeEnd = remainingOpenMeetings
                 where remainingOpenMeetings = findOpenPeriodsHelper dayRange remainingMeetings newOpenSlots newMeetingRangeEnd
-                      toAppendToOpenSlots = meetingEnd > meetingRangeEnd 
+                      toAppendToOpenSlots = meetingStart > meetingRangeEnd
                       newMeetingRangeEnd = max meetingEnd meetingRangeEnd 
                       openSlot = TimeRange meetingRangeEnd meetingStart
                       newOpenSlots = if toAppendToOpenSlots then openSlot : openSlots else openSlots
