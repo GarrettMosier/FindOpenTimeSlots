@@ -17,17 +17,20 @@ testRangeThree :: Meetings
 testRangeThree = [TimeRange (Time 2) (Time 4), TimeRange (Time 3) (Time 5)]
 
 testDayRange :: DayPeriod
-testDayRange = TimeRange (Time 0) (Time 20)
+testDayRange = TimeRange (Time 0) (Time 24)
 
 
+-- Ensures time range makes sense
 validTimeRange :: TimeRange -> Bool
 validTimeRange (TimeRange start end) = start < end && start /= end
 
 
+-- Ensures meeting time is within the course of a day
 clampTimeToDay :: DayPeriod -> TimeRange -> TimeRange
 clampTimeToDay (TimeRange dayStart dayEnd) (TimeRange start end) = (TimeRange (max start dayStart) (min end dayEnd))
 
 
+-- Finds all time during day where a meeting isn't scheduled
 findOpenPeriods :: DayPeriod -> Meetings -> OpenSlots
 findOpenPeriods dayRange@(TimeRange dayStart _) allMeetings = reverse openSlots
                 where openSlots = findOpenPeriodsHelper dayRange validMeetings [] dayStart
