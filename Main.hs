@@ -61,8 +61,8 @@ findOpenPeriodsHelper :: Ord a => BookablePeriod a -> Meetings a -> OpenSlots a 
 findOpenPeriodsHelper (TimeRange _ dayEnd) [] openSlots lastMeetingEnd = if lastMeetingEnd < dayEnd
                                                                              then (TimeRange lastMeetingEnd dayEnd) : openSlots
                                                                              else openSlots
-findOpenPeriodsHelper dayRange ((TimeRange meetingStart meetingEnd) : remainingMeetings) openSlots meetingRangeEnd = remainingOpenMeetings
-                where remainingOpenMeetings = findOpenPeriodsHelper dayRange remainingMeetings newOpenSlots newMeetingRangeEnd
+findOpenPeriodsHelper dayRange ((TimeRange meetingStart meetingEnd) : remainingMeetings) openSlots meetingRangeEnd = foundOpenSlots
+                where foundOpenSlots = findOpenPeriodsHelper dayRange remainingMeetings newOpenSlots newMeetingRangeEnd
                       toAppendToOpenSlots = meetingStart > meetingRangeEnd
                       newMeetingRangeEnd = max meetingEnd meetingRangeEnd 
                       openSlot = TimeRange meetingRangeEnd meetingStart
