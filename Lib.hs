@@ -15,10 +15,10 @@ data Day = Sunday | Monday | Tuesday | Wednesday | Thursday | Friday | Saturday 
 
 -- Custom Show instances
 instance Show PointInTime where
-  show (PointInTime day time) = show day ++ " at " ++ show time
+  show (PointInTime day time) = show day ++ ":" ++ show time
 
 instance Show a => Show (TimeRange a) where
-  show (TimeRange beginning end) = show beginning ++ " to " ++ show end
+  show (TimeRange beginning end) = show beginning ++ "-" ++ show end
 
 instance Show a => Show (Time a) where
   show (Time x) = show x
