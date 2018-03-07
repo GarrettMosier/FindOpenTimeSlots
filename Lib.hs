@@ -1,4 +1,4 @@
-module Lib where 
+module Lib (findOpenPeriods, Meetings(..), BookablePeriod(..), Day(..), PointInTime(..), Time(..), TimeRange(..)) where 
 
 import Data.List
 
