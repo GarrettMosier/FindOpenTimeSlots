@@ -1,14 +1,24 @@
 import Data.List
 
-data PointInTime = PointInTime Day Int deriving (Show, Eq, Ord)
-newtype Time a   = Time a deriving (Show, Eq, Ord)
-data TimeRange a = TimeRange (Time a) (Time a) deriving (Show, Eq, Ord)
+data PointInTime = PointInTime Day Int deriving (Eq, Ord)
+newtype Time a   = Time a deriving (Eq, Ord)
+data TimeRange a = TimeRange (Time a) (Time a) deriving (Eq, Ord)
 type BookablePeriod a = TimeRange a
 type OpenSlots a = [TimeRange a]
 type Meetings  a = [TimeRange a]
 
 data Day = Sunday | Monday | Tuesday | Wednesday | Thursday | Friday | Saturday deriving (Ord, Eq, Show)
 
+
+instance Show PointInTime where
+  show (PointInTime day time) = show day ++ " at " ++ show time
+
+instance Show a => Show (TimeRange a) where
+  show (TimeRange beginning end) = show beginning ++ " to " ++ show end
+
+instance Show a => Show (Time a) where
+  show (Time x) = show x
+  
 
 testRangeOne :: Meetings Int
 testRangeOne = [TimeRange (Time 10) (Time 12), TimeRange (Time 1) (Time 4), TimeRange (Time 18) (Time 19), TimeRange (Time 8) (Time 9), TimeRange (Time 4) (Time 25), TimeRange (Time (-5)) (Time 1)]
