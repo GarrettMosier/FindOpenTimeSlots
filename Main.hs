@@ -9,11 +9,11 @@ testRangeTwo = [TimeRange (Time 5) (Time 15), TimeRange (Time 1) (Time 2), TimeR
 testRangeThree :: Meetings Int
 testRangeThree = [TimeRange (Time 2) (Time 4), TimeRange (Time 3) (Time 5)]
 
-testFullWeekOne :: Meetings PointInTime
-testFullWeekOne = [TimeRange (Time (PointInTime Sunday 2)) (Time (PointInTime Monday 4)), TimeRange (Time (PointInTime Tuesday 3)) (Time (PointInTime Thursday 5))]
-
 testWeekOne :: Meetings Day
 testWeekOne = [TimeRange (Time Sunday) (Time Tuesday), TimeRange (Time Thursday) (Time Friday)]
+
+testFullWeekOne :: Meetings PointInTime
+testFullWeekOne = [TimeRange (Time (PointInTime Sunday 2)) (Time (PointInTime Monday 4)), TimeRange (Time (PointInTime Tuesday 3)) (Time (PointInTime Thursday 5))]
 
 
 -- Min and Max values for test values
@@ -27,6 +27,13 @@ testFullWeekRange :: BookablePeriod PointInTime
 testFullWeekRange = TimeRange (Time (PointInTime Sunday 0)) (Time (PointInTime Saturday 24))
 
 
+testRangeOneAnswer    = []
+testRangeTwoAnswer    = [TimeRange (Time 0) (Time 1), TimeRange (Time 2) (Time 5), TimeRange (Time 15) (Time 18), TimeRange (Time 19) (Time 24)]
+testRangeThreeAnswer  = [TimeRange (Time 0) (Time 2), TimeRange (Time 5) (Time 24)]
+testWeekOneAnswer     = [TimeRange (Time Tuesday) (Time Thursday), TimeRange (Time Friday) (Time Saturday)]
+testFullWeekOneAnswer = [TimeRange (Time (PointInTime Sunday 0)) (Time (PointInTime Sunday 2)), TimeRange (Time (PointInTime Monday 4)) (Time (PointInTime Tuesday 3)), TimeRange (Time (PointInTime Thursday 5)) (Time (PointInTime Saturday 24))]
+
+
 main :: IO ()
 main = do
   print $ findOpenPeriods testDayRange testRangeOne
@@ -34,3 +41,9 @@ main = do
   print $ findOpenPeriods testDayRange testRangeThree
   print $ findOpenPeriods testWeekRange testWeekOne
   print $ findOpenPeriods testFullWeekRange testFullWeekOne
+
+  print $ findOpenPeriods testDayRange testRangeOne == testRangeOneAnswer
+  print $ findOpenPeriods testDayRange testRangeTwo == testRangeTwoAnswer
+  print $ findOpenPeriods testDayRange testRangeThree == testRangeThreeAnswer
+  print $ findOpenPeriods testWeekRange testWeekOne == testWeekOneAnswer
+  print $ findOpenPeriods testFullWeekRange testFullWeekOne == testFullWeekOneAnswer
