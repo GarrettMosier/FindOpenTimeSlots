@@ -2,6 +2,7 @@ module Lib where
 
 import Data.List
 
+-- Custom types
 data PointInTime = PointInTime Day Int deriving (Eq, Ord)
 newtype Time a   = Time a deriving (Eq, Ord)
 data TimeRange a = TimeRange (Time a) (Time a) deriving (Eq, Ord)
@@ -12,6 +13,7 @@ type Meetings  a = [TimeRange a]
 data Day = Sunday | Monday | Tuesday | Wednesday | Thursday | Friday | Saturday deriving (Ord, Eq, Show)
 
 
+-- Custom Show instances
 instance Show PointInTime where
   show (PointInTime day time) = show day ++ " at " ++ show time
 
@@ -21,6 +23,7 @@ instance Show a => Show (TimeRange a) where
 instance Show a => Show (Time a) where
   show (Time x) = show x
   
+
 
 -- Ensures time range makes sense
 validTimeRange :: Ord a => TimeRange a -> Bool
