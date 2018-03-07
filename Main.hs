@@ -35,16 +35,18 @@ testWeekOneAnswer     = [TimeRange (Time Tuesday) (Time Thursday), TimeRange (Ti
 testFullWeekOneAnswer = [TimeRange (Time (PointInTime Sunday 0)) (Time (PointInTime Sunday 2)), TimeRange (Time (PointInTime Monday 4)) (Time (PointInTime Tuesday 3)), TimeRange (Time (PointInTime Thursday 5)) (Time (PointInTime Saturday 24))]
 
 
+runTest :: (Ord a, Show a) => BookablePeriod a -> Meetings a -> Meetings a -> IO ()
+runTest range meetings answer = do
+  let openSlots = findOpenPeriods range meetings
+  print openSlots
+  print $ openSlots == answer
+  
+
+
 main :: IO ()
 main = do
-  print $ findOpenPeriods testDayRange testRangeOne
-  print $ findOpenPeriods testDayRange testRangeTwo
-  print $ findOpenPeriods testDayRange testRangeThree
-  print $ findOpenPeriods testWeekRange testWeekOne
-  print $ findOpenPeriods testFullWeekRange testFullWeekOne
-
-  print $ findOpenPeriods testDayRange testRangeOne == testRangeOneAnswer
-  print $ findOpenPeriods testDayRange testRangeTwo == testRangeTwoAnswer
-  print $ findOpenPeriods testDayRange testRangeThree == testRangeThreeAnswer
-  print $ findOpenPeriods testWeekRange testWeekOne == testWeekOneAnswer
-  print $ findOpenPeriods testFullWeekRange testFullWeekOne == testFullWeekOneAnswer
+  runTest testDayRange testRangeOne testRangeOneAnswer
+  runTest testDayRange testRangeTwo testRangeTwoAnswer
+  runTest testDayRange testRangeThree testRangeThreeAnswer
+  runTest testWeekRange testWeekOne testWeekOneAnswer
+  runTest testFullWeekRange testFullWeekOne testFullWeekOneAnswer
