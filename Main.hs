@@ -1,4 +1,4 @@
-import Lib (findOpenPeriods, Meetings, BookablePeriod, PointInTime(..), TimeRange(..), Day(..), Time(..))
+import Lib 
 
 testRangeOne :: Meetings Int
 testRangeOne = [TimeRange (Time 10) (Time 12), TimeRange (Time 1) (Time 4), TimeRange (Time 18) (Time 19), TimeRange (Time 8) (Time 9), TimeRange (Time 4) (Time 25), TimeRange (Time (-5)) (Time 1)]
