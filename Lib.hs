@@ -39,8 +39,8 @@ clampTimeToDay (TimeRange dayStart dayEnd) (TimeRange start end) = (TimeRange (m
 findOpenPeriods :: Ord a => BookablePeriod a -> Meetings a -> OpenSlots a
 findOpenPeriods dayRange@(TimeRange dayStart _) allMeetings = reverse openSlots
                 where openSlots = findOpenPeriodsHelper dayRange validMeetings [] dayStart
-                      validMeetings = filter validTimeRange $ sort remappedMeetings
-                      remappedMeetings = map (clampTimeToDay dayRange) allMeetings
+                      validMeetings = filter validTimeRange $ sort clampedMeetings
+                      clampedMeetings = map (clampTimeToDay dayRange) allMeetings
 
 
 findOpenPeriodsHelper :: Ord a => BookablePeriod a -> Meetings a -> OpenSlots a -> Time a -> OpenSlots a
