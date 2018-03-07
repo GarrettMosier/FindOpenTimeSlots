@@ -27,6 +27,7 @@ testFullWeekRange :: BookablePeriod PointInTime
 testFullWeekRange = TimeRange (Time (PointInTime Sunday 0)) (Time (PointInTime Saturday 24))
 
 
+-- Expected results from the tests
 testRangeOneAnswer    = []
 testRangeTwoAnswer    = [TimeRange (Time 0) (Time 1), TimeRange (Time 2) (Time 5), TimeRange (Time 15) (Time 18), TimeRange (Time 19) (Time 24)]
 testRangeThreeAnswer  = [TimeRange (Time 0) (Time 2), TimeRange (Time 5) (Time 24)]
