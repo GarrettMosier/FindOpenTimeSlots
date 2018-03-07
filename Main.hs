@@ -1,5 +1,6 @@
 import Data.List
 
+data PointInTime = PointInTime Day Int deriving (Show, Eq, Ord)
 newtype Time a   = Time a deriving (Show, Eq, Ord)
 data TimeRange a = TimeRange (Time a) (Time a) deriving (Show, Eq, Ord)
 type DayPeriod a = TimeRange a
@@ -18,14 +19,24 @@ testRangeTwo = [TimeRange (Time 5) (Time 15), TimeRange (Time 1) (Time 2), TimeR
 testRangeThree :: Meetings Int
 testRangeThree = [TimeRange (Time 2) (Time 4), TimeRange (Time 3) (Time 5)]
 
+testFullWeekOne :: Meetings PointInTime
+testFullWeekOne = [TimeRange (Time (PointInTime Sunday 2)) (Time (PointInTime Monday 4)), TimeRange (Time (PointInTime Tuesday 3)) (Time (PointInTime Thursday 5))]
+
+testWeekOne :: Meetings Day
+testWeekOne = [TimeRange (Time Sunday) (Time Tuesday), TimeRange (Time Thursday) (Time Friday)]
+
+
 testDayRange :: DayPeriod Int
 testDayRange = TimeRange (Time 0) (Time 24)
 
 testWeekRange :: DayPeriod Day
 testWeekRange = TimeRange (Time Sunday) (Time Saturday)
 
-testWeekOne :: Meetings Day
-testWeekOne = [TimeRange (Time Sunday) (Time Tuesday), TimeRange (Time Thursday) (Time Friday)]
+testFullWeekRange :: DayPeriod PointInTime
+testFullWeekRange = TimeRange (Time (PointInTime Sunday 0)) (Time (PointInTime Saturday 24))
+
+
+
 
 
 -- Ensures time range makes sense
@@ -64,3 +75,4 @@ main = do
   print $ findOpenPeriods testDayRange testRangeTwo
   print $ findOpenPeriods testDayRange testRangeThree
   print $ findOpenPeriods testWeekRange testWeekOne
+  print $ findOpenPeriods testFullWeekRange testFullWeekOne
