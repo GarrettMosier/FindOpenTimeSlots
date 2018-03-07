@@ -3,7 +3,7 @@ import Data.List
 data PointInTime = PointInTime Day Int deriving (Show, Eq, Ord)
 newtype Time a   = Time a deriving (Show, Eq, Ord)
 data TimeRange a = TimeRange (Time a) (Time a) deriving (Show, Eq, Ord)
-type DayPeriod a = TimeRange a
+type BookablePeriod a = TimeRange a
 type OpenSlots a = [TimeRange a]
 type Meetings  a = [TimeRange a]
 
@@ -26,13 +26,13 @@ testWeekOne :: Meetings Day
 testWeekOne = [TimeRange (Time Sunday) (Time Tuesday), TimeRange (Time Thursday) (Time Friday)]
 
 
-testDayRange :: DayPeriod Int
+testDayRange :: BookablePeriod Int
 testDayRange = TimeRange (Time 0) (Time 24)
 
-testWeekRange :: DayPeriod Day
+testWeekRange :: BookablePeriod Day
 testWeekRange = TimeRange (Time Sunday) (Time Saturday)
 
-testFullWeekRange :: DayPeriod PointInTime
+testFullWeekRange :: BookablePeriod PointInTime
 testFullWeekRange = TimeRange (Time (PointInTime Sunday 0)) (Time (PointInTime Saturday 24))
 
 
@@ -45,19 +45,19 @@ validTimeRange (TimeRange start end) = start < end && start /= end
 
 
 -- Ensures meeting time is within the course of a day
-clampTimeToDay :: Ord a => DayPeriod a -> TimeRange a -> TimeRange a
+clampTimeToDay :: Ord a => BookablePeriod a -> TimeRange a -> TimeRange a
 clampTimeToDay (TimeRange dayStart dayEnd) (TimeRange start end) = (TimeRange (max start dayStart) (min end dayEnd))
 
 
 -- Finds all time during day where a meeting isn't scheduled
-findOpenPeriods :: Ord a => DayPeriod a -> Meetings a -> OpenSlots a
+findOpenPeriods :: Ord a => BookablePeriod a -> Meetings a -> OpenSlots a
 findOpenPeriods dayRange@(TimeRange dayStart _) allMeetings = reverse openSlots
                 where openSlots = findOpenPeriodsHelper dayRange validMeetings [] dayStart
                       validMeetings = filter validTimeRange $ sort remappedMeetings
                       remappedMeetings = map (clampTimeToDay dayRange) allMeetings
 
 
-findOpenPeriodsHelper :: Ord a => DayPeriod a -> Meetings a -> OpenSlots a -> Time a -> OpenSlots a
+findOpenPeriodsHelper :: Ord a => BookablePeriod a -> Meetings a -> OpenSlots a -> Time a -> OpenSlots a
 findOpenPeriodsHelper (TimeRange _ dayEnd) [] openSlots lastMeetingEnd = if lastMeetingEnd < dayEnd
                                                                              then (TimeRange lastMeetingEnd dayEnd) : openSlots
                                                                              else openSlots
